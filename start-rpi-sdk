@@ -1,0 +1,72 @@
+#!/bin/bash
+
+SDK_PATH=$1
+
+function usage {
+	echo "Usage: start-sdk-rpi SDK_PATH"
+}
+
+function mountall {
+	echo "Mounting directories..."
+	mount -t proc proc $SDK_PATH/proc
+	mount -t sysfs sysfs $SDK_PATH/sys
+	mount -t devtmpfs udev $SDK_PATH/dev
+	mount -t devpts devpts $SDK_PATH/dev/pts
+}
+
+function pre_start {
+	local abspath=$(cd $SDK_PATH/.sdk; pwd -P)
+	if [ -z "`grep $abspath /proc/mounts`" ]; then
+		mountall
+		mount -t tmpfs tmpfs $SDK_PATH/.sdk
+	fi
+	cp /etc/resolv.conf $SDK_PATH/etc/.
+	cp /etc/hosts $SDK_PATH/etc/.
+	touch $SDK_PATH/.sdk/$$
+}
+
+function umountall {
+	echo "Umounting directories..."
+	umount $SDK_PATH/dev/pts
+	umount $SDK_PATH/dev
+	umount $SDK_PATH/sys
+	umount $SDK_PATH/proc
+}
+
+function post_exit {
+	local abspath=$(cd $SDK_PATH/.sdk; pwd -P)
+	if [ -z "`grep $abspath /proc/mounts`" ]; then
+		# Should not happen, do nothing
+		return
+	fi
+
+	rm -f $SDK_PATH/.sdk/$$
+	if [ -z "`ls $SDK_PATH/.sdk`" ]; then
+		umount $SDK_PATH/.sdk
+		umountall
+	fi
+}
+
+if [ `id -u` -ne 0 ]; then
+	echo "You must have root permissions to run this script. Trust me!"
+	exit
+fi
+
+if [ -z $SDK_PATH ] || [ "$SDK_PATH" = "-h" ]; then
+	usage
+	exit
+fi
+
+if [ ! -x $SDK_PATH/bin/su ]; then
+	echo "Error: SDK_PATH is not a valid sdk directory."
+	usage
+	exit
+fi
+
+pre_start
+
+trap "post_exit; exit" SIGINT SIGTERM SIGHUP
+
+chroot $SDK_PATH /bin/su -l pi
+
+post_exit

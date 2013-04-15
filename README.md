@@ -6,7 +6,7 @@ The build performance is close to the desktop build.
 
 **Important:** This chroot must not be used as rootfs.
 
-#Installing#
+#Installing the SDK#
 
 ###preparing the host machine###
 <pre>
@@ -30,13 +30,13 @@ Use the latest one available at this repository.
 
 **Suggestion**: Put it on a $PATH directory (/usr/bin, ~/bin, whatever...)
 
-## Upgrading packages inside SDK ##
+### Upgrading packages inside SDK ###
 
 Several binaries were manually copied from host machine to the chroot. The related packages were pinned (locked) to prevent their upgrade as we don't want to decrease the SDK performance.
 
-It's safe to run <pre>apt-get upgrade</pre> though. However, it's a good idea to be careful when doing the upgrade ;)
+It's safe to run <pre>sudo apt-get upgrade</pre> though. However, it's a good idea to be careful when doing the upgrade ;)
 
-#Using#
+#Using the SDK#
 <pre>
   sudo start-rpi-sdk rpi-sdk
 </pre>
@@ -55,7 +55,9 @@ It's safe to run <pre>apt-get upgrade</pre> though. However, it's a good idea to
   <b># Build Nix in RELEASE. It takes ~50min</b>
   Tools/Scripts/build-webkit --nix --cmakeargs#"-DCMAKE_PREFIX_PATH#/opt/vc" --no-llint --opengles2 --prefix#/opt/nix
 </pre>
-# Installing Nix dependencies #
+#Installing Nix#
+
+### Installing Nix dependencies ###
 
 You can install the nix dependencies that were built using jhbuild.
 
@@ -73,4 +75,21 @@ In the RPi board:
 <pre>
   sudo mkdir /opt/nix-deps
   sudo tar xf /home/pi/nix-deps.tar -C /opt/nix-deps
+</pre>
+
+### Installing Nix ###
+
+In the chroot:
+<pre>
+  cd webkitnix/WebKitBuild/Release
+  sudo make install
+  cd /opt
+  sudo tar cf nix.tar nix/*
+  scp nix.tar pi@&lt;rasp_ip_addr&gt;:
+</pre>
+
+In the RPi board:
+<pre>
+  sudo mkdir /opt/nix
+  sudo tar xf /home/pi/nix.tar -C /opt/nix
 </pre>

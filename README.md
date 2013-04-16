@@ -53,7 +53,7 @@ It's safe to run <pre>sudo apt-get upgrade</pre> though. However, it's a good id
   Tools/Scripts/update-webkitnix-libs
 
   <b># Build Nix in RELEASE. It takes ~50min</b>
-  Tools/Scripts/build-webkit --nix --cmakeargs#"-DCMAKE_PREFIX_PATH#/opt/vc" --no-llint --opengles2 --prefix#/opt/nix
+  Tools/Scripts/build-webkit --nix --cmakeargs="-DCMAKE_PREFIX_PATH=/opt/vc" --no-llint --opengles2 --prefix=/opt/nix
 </pre>
 #Installing Nix#
 

@@ -51,7 +51,7 @@ for a in arm armeb; do
         echo 1 | sudo tee /proc/sys/fs/binfmt_misc/${a} >/dev/null
     fi
 done
-<pre>
+</pre>
 
 Run the above script before starting the sdk. Notice it uses `/usr/bin/qemu-arm-static` and `/usr/bin/qemu-armeb-static`, but those programs will be available within the SDK, so there is no need to install `qemu` on the host system. 
 

@@ -1,0 +1,17 @@
+Index: icecc-0.9.7/services/platform.cpp
+===================================================================
+--- icecc-0.9.7.orig/services/platform.cpp	2008-10-21 07:40:13.000000000 -0300
++++ icecc-0.9.7/services/platform.cpp	2013-04-16 18:55:16.749573848 -0300
+@@ -30,6 +30,12 @@
+     using namespace std;
+     string platform;
+ 
++    char *env = getenv( "ICECC_PLATFORM" );
++    if ( env ) {
++        platform = env;
++        return platform;
++    }
++
+     struct utsname uname_buf;
+     if ( uname( &uname_buf ) ) {
+         log_perror( "uname call failed" );

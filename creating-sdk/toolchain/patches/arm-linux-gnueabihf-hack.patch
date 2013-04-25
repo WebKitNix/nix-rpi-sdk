@@ -1,0 +1,33 @@
+diff -Nru a/scripts/build/arch/arm.sh c/scripts/build/arch/arm.sh
+--- a/scripts/build/arch/arm.sh	2012-11-11 17:43:58.000000000 -0300
++++ c/scripts/build/arch/arm.sh	2013-01-31 20:24:32.820006470 -0300
+@@ -6,7 +6,7 @@
+ 
+     # The system part of the tuple:
+     case "${CT_LIBC},${CT_ARCH_ARM_EABI}" in
+-        *glibc,y)   CT_TARGET_SYS=gnueabi;;
++        *glibc,y)   CT_TARGET_SYS=gnueabihf;;
+         uClibc,y)   CT_TARGET_SYS=uclibcgnueabi;;
+         *,y)        CT_TARGET_SYS=eabi;;
+     esac
+diff -Nru a/scripts/functions c/scripts/functions
+--- a/scripts/functions	2012-11-11 17:43:58.000000000 -0300
++++ c/scripts/functions	2013-01-31 20:26:18.228006871 -0300
+@@ -1160,7 +1160,7 @@
+ 
+     # Finish the target tuple construction
+     CT_TARGET="${CT_TARGET_ARCH}"
+-    CT_TARGET="${CT_TARGET}${CT_TARGET_VENDOR:+-${CT_TARGET_VENDOR}}"
++    #CT_TARGET="${CT_TARGET}${CT_TARGET_VENDOR:+-${CT_TARGET_VENDOR}}"
+     CT_TARGET="${CT_TARGET}${CT_TARGET_KERNEL:+-${CT_TARGET_KERNEL}}"
+     CT_TARGET="${CT_TARGET}${CT_TARGET_SYS:+-${CT_TARGET_SYS}}"
+ 
+@@ -1177,7 +1177,7 @@
+     esac
+ 
+     # Canonicalise it
+-    CT_TARGET=$(CT_DoConfigSub "${CT_TARGET}")
++    #CT_TARGET=$(CT_DoConfigSub "${CT_TARGET}")
+     # Prepare the target CFLAGS
+     CT_ARCH_TARGET_CFLAGS="${CT_ARCH_TARGET_CFLAGS} ${CT_ARCH_ENDIAN_CFLAG}"
+     CT_ARCH_TARGET_CFLAGS="${CT_ARCH_TARGET_CFLAGS} ${CT_ARCH_ARCH_CFLAG}"

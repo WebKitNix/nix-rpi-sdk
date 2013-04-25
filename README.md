@@ -60,7 +60,7 @@ Run the above script before starting the sdk. Notice it uses `/usr/bin/qemu-arm-
 Use the latest one available at this repository.
 
 <pre>
-sudo tar xf rpi-sdk-20130418.tar.xz
+sudo tar xf rpi-sdk-x86_64.tar.xz
 </pre>
 
 ###chroot start script###
@@ -167,6 +167,44 @@ sudo tar xf /home/pi/nix.tar -C /opt
 
 #Troubleshooting#
 
+###I can't chroot to the SDK###
+
+When I issue the start-rpi-sdk script, I'm getting the following error:
+
+<pre>
+user@host:~$ sudo start-rpi-sdk rpi-sdk
+Mounting directories...
+chroot: failed to run command `/bin/su': No such file or directory
+Umounting directories...
+</pre>
+
+####Cause 1: Something is wrong with your qemu-arm installation####
+
+Check the following commands and outputs:
+<pre>
+user@host:~$ ls -l rpi-sdk/usr/bin/qemu-arm-static
+-rwxr-xr-x 1 root root 3236664 Feb  1 21:57 rpi-sdk/usr/bin/qemu-arm-static
+user@host:~$ cat /proc/sys/fs/binfmt_misc/qemu-arm
+enabled
+interpreter /usr/bin/qemu-arm-static
+flags: OC
+offset 0
+magic 7f454c4601010100000000000000000002002800
+mask ffffffffffffff00fffffffffffffffffeffffff
+</pre>
+
+####Cause 2: Your linux kernel is not x86_64####
+
+The x86_64 binaries cannot run in i386 kernels. This SDK is specific to x86_64 system architectures.
+
+Check your architecture by running:
+
+<pre>
+uname --hardware-platform
+</pre>
+
+If you want to have an i386 compatible SDK you must build it from scratch. This repository has all intructions, patches and sources needed to do such task. Just adapt the toolchain scripts to i386 architecture and voilá.
+
 ###I can't use **sudo** inside the chroot.###
 
 I'm getting the following error:
@@ -181,7 +219,7 @@ sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid
 You may have incorrectly extracted the sdk tarball to you computer. You MUST use **sudo**:
 
 <pre>
-sudo tar xf rpi-sdk-20130418.tar.xz
+sudo tar xf rpi-sdk-x86_64.tar.xz
 </pre>
 
 ####Cause 2: Buggy update-binfmt####

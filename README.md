@@ -68,7 +68,7 @@ sudo tar xf rpi-sdk-20130418.tar.xz
 Use the latest one available at this repository.
 
 <pre>
-  chmod +x start-rpi-sdk
+chmod +x start-rpi-sdk
 </pre>
 
 **Suggestion**: Put it on a $PATH directory (/usr/bin, ~/bin, whatever...)
@@ -81,22 +81,22 @@ It's safe to run <pre>sudo apt-get upgrade</pre> though. However, it's a good id
 
 #Using the SDK#
 <pre>
-  sudo start-rpi-sdk rpi-sdk
+sudo start-rpi-sdk rpi-sdk
 </pre>
 **Important:** start-rpi-sdk does several mounts (proc, dev, devpts and sys) into chroot directories before chroot. After you leave the chroot, the script umounts these directories. It is also prepared to handle SIGINT and SIGTERM.  **However, check if there is something mounted before REMOVING the SDK directory to avoid the wasting of your /dev, for instance.**
 
 #Building Nix (without icecc)#
 <pre>
-  sudo start-rpi-sdk SDK_PATH
+sudo start-rpi-sdk SDK_PATH
 
-  git clone git://github.com/WebKitNix/webkitnix.git
-  cd webkitnix
+git clone git://github.com/WebKitNix/webkitnix.git
+cd webkitnix
 
-  # Build Nix dependencies.
-  Tools/Scripts/update-webkitnix-libs
+# Build Nix dependencies.
+Tools/Scripts/update-webkitnix-libs
 
-  # Build Nix in RELEASE.
-  Tools/Scripts/build-webkit --nix --cmakeargs="-DCMAKE_PREFIX_PATH=/opt/vc" --no-llint --opengles2 --prefix=/opt/nix
+# Build Nix in RELEASE.
+Tools/Scripts/build-webkit --nix --cmakeargs="-DCMAKE_PREFIX_PATH=/opt/vc" --no-llint --opengles2 --prefix=/opt/nix
 </pre>
 
 #Building Nix (with icecc)#
@@ -105,25 +105,25 @@ It's safe to run <pre>sudo apt-get upgrade</pre> though. However, it's a good id
 **Note 2**: The icecc binaries in the chroot are patched to work with this SDK, do not overwrite them.
 
 <pre>
-  sudo start-rpi-sdk SDK_PATH
+sudo start-rpi-sdk SDK_PATH
 
-  # Preparing environment to use icecc
-  mkdir icecc
-  pushd icecc
-  icecc --build-native
-  export ICECC_VERSION=/home/pi/icecc/`ls`
-  export ICECC_PLATFORM=x86_64    # Put your arch here
-  export PATH=/usr/lib/icecc/bin:$PATH
-  popd
+# Preparing environment to use icecc
+mkdir icecc
+pushd icecc
+icecc --build-native
+export ICECC_VERSION=/home/pi/icecc/`ls`
+export ICECC_PLATFORM=x86_64    # Put your arch here
+export PATH=/usr/lib/icecc/bin:$PATH
+popd
 
-  git clone git://github.com/WebKitNix/webkitnix.git
-  cd webkitnix
+git clone git://github.com/WebKitNix/webkitnix.git
+cd webkitnix
 
-  # Build Nix dependencies
-  Tools/Scripts/update-webkitnix-libs
+# Build Nix dependencies
+Tools/Scripts/update-webkitnix-libs
 
-  # Build Nix in RELEASE
-  Tools/Scripts/build-webkit --nix --cmakeargs="-DCMAKE_PREFIX_PATH=/opt/vc" --makeargs="-j100" --no-llint --opengles2 --prefix=/opt/nix
+# Build Nix in RELEASE
+Tools/Scripts/build-webkit --nix --cmakeargs="-DCMAKE_PREFIX_PATH=/opt/vc" --makeargs="-j100" --no-llint --opengles2 --prefix=/opt/nix
 </pre>
 
 #Installing Nix#
@@ -134,35 +134,35 @@ You can install the nix dependencies that were built using jhbuild.
 
 In the chroot:
 <pre>
-  mkdir nix-deps
-  cp -a webkitnix/WebKitBuild/Dependencies/Root/* nix-deps/.
-  sed -i 's,/home/pi/.*/Root,/opt/nix-deps,' nix-deps/lib/pkgconfig/*.pc
-  sudo chown -R root.root nix-deps/*
-  sudo tar cf nix-deps.tar nix-deps/*
-  scp nix-deps.tar pi@&lt;rasp_ip_addr&gt;:
+mkdir nix-deps
+cp -a webkitnix/WebKitBuild/Dependencies/Root/* nix-deps/.
+sed -i 's,/home/pi/.*/Root,/opt/nix-deps,' nix-deps/lib/pkgconfig/*.pc
+sudo chown -R root.root nix-deps/*
+sudo tar cf nix-deps.tar nix-deps/*
+scp nix-deps.tar pi@&lt;rasp_ip_addr&gt;:
 </pre>
 
 In the RPi board:
 <pre>
-  sudo mkdir /opt/nix-deps
-  sudo tar xf /home/pi/nix-deps.tar -C /opt
+sudo mkdir /opt/nix-deps
+sudo tar xf /home/pi/nix-deps.tar -C /opt
 </pre>
 
 ### Installing Nix ###
 
 In the chroot:
 <pre>
-  cd webkitnix/WebKitBuild/Release
-  sudo make install
-  cd /opt
-  sudo tar cf nix.tar nix/*
-  scp nix.tar pi@&lt;rasp_ip_addr&gt;:
+cd webkitnix/WebKitBuild/Release
+sudo make install
+cd /opt
+sudo tar cf nix.tar nix/*
+scp nix.tar pi@&lt;rasp_ip_addr&gt;:
 </pre>
 
 In the RPi board:
 <pre>
-  sudo mkdir /opt/nix
-  sudo tar xf /home/pi/nix.tar -C /opt
+sudo mkdir /opt/nix
+sudo tar xf /home/pi/nix.tar -C /opt
 </pre>
 
 #Troubleshooting#
@@ -172,8 +172,8 @@ In the RPi board:
 I'm getting the following error:
 
 <pre>
-  pi@machine:~$ sudo ls
-  sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges?
+pi@machine:~$ sudo ls
+sudo: effective uid is not 0, is /usr/bin/sudo on a file system with the 'nosuid' option set or an NFS file system without root privileges?
 </pre>
 
 ####Cause 1: Incorrect SDK tarball extraction####
@@ -181,7 +181,7 @@ I'm getting the following error:
 You may have incorrectly extracted the sdk tarball to you computer. You MUST use **sudo**:
 
 <pre>
-  sudo tar xf rpi-sdk-20130418.tar.xz
+sudo tar xf rpi-sdk-20130418.tar.xz
 </pre>
 
 ####Cause 2: Buggy update-binfmt####
@@ -193,20 +193,20 @@ http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=683205
 To solve the problem, first make sure the following file has the described content:
 
 <pre>
-  pi@machine:~$ cat /usr/share/binfmts/qemu-arm
-  package qemu-user-static
-  interpreter /usr/bin/qemu-arm-static
-  credentials yes
-  offset 0
-  magic \x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00
-  mask \xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff
+pi@machine:~$ cat /usr/share/binfmts/qemu-arm
+package qemu-user-static
+interpreter /usr/bin/qemu-arm-static
+credentials yes
+offset 0
+magic \x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00
+mask \xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff
 </pre>
 
 Run the following commands:
 
 <pre>
-  sudo update-binfmts --import qemu-arm
-  sudo update-binfmts --import qemu-arm # Yes, twice. Before complaining, read the bug link
+sudo update-binfmts --import qemu-arm
+sudo update-binfmts --import qemu-arm # Yes, twice. Before complaining, read the bug link
 </pre>
 
 **Note that this solution is based on ubuntu/debian distribution. Maybe in your distribution, the qemu interpreter has a different name. Maybe the /usr/share/binfmts/qemu-arm file does not exists (is in another place?). So, be careful, do not copy-and-paste commands without understand what you're doing.**

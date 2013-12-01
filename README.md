@@ -92,11 +92,11 @@ sudo start-rpi-sdk SDK_PATH
 git clone git://github.com/WebKitNix/webkitnix.git
 cd webkitnix
 
-# Build Nix dependencies.
-Tools/Scripts/update-webkitnix-libs
+# Build Nix dependencies (except for webrtc, which doesn't currently build on the Pi)
+Tools/Scripts/update-webkitnix-libs -s libwebrtc
 
 # Build Nix in RELEASE.
-Tools/Scripts/build-webkit --nix --cmakeargs="-DCMAKE_PREFIX_PATH=/opt/vc" --no-llint --opengles2 --prefix=/opt/nix
+Tools/Scripts/build-webkit --nix --cmakeargs="-DDISABLE_STRICT_BUILD=ON -DCMAKE_PREFIX_PATH=/opt/vc" --opengles2 --prefix=/opt/nix
 </pre>
 
 #Building Nix (with icecc)#
@@ -119,11 +119,11 @@ popd
 git clone git://github.com/WebKitNix/webkitnix.git
 cd webkitnix
 
-# Build Nix dependencies
-Tools/Scripts/update-webkitnix-libs
+# Build Nix dependencies (except for webrtc, which doesn't currently build on the Pi)
+Tools/Scripts/update-webkitnix-libs -s libwebrtc
 
-# Build Nix in RELEASE
-Tools/Scripts/build-webkit --nix --cmakeargs="-DCMAKE_PREFIX_PATH=/opt/vc" --makeargs="-j100" --no-llint --opengles2 --prefix=/opt/nix
+# Build Nix in RELEASE.
+Tools/Scripts/build-webkit --nix --cmakeargs="-DDISABLE_STRICT_BUILD=ON -DCMAKE_PREFIX_PATH=/opt/vc"  --makeargs="-j100" --opengles2 --prefix=/opt/nix
 </pre>
 
 #Installing Nix#
